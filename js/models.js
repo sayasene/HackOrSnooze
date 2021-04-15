@@ -73,8 +73,29 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, {title, author, url} */) {
-    // UNIMPLEMENTED: complete this function!
+  //response will be equivalent to what is returned from the server after a 
+  // new story post request is sent
+  async addStory(user, newStory) {
+    console.log('ran');
+    const response = await axios({
+      method: "POST",
+      url: `${BASE_URL}/stories`,
+      // CR: data key is needed for axios syntax
+      data:{
+        'token': user.loginToken,
+        'story': {
+          'author': newStory.author,
+          'title': newStory.title,
+          'url': newStory.url
+        }
+      }
+    });
+    // CR: response.data.story removes the nesting risk
+    let responseStoryObject = new Story(response.data.story);
+    //CR: this.stories vs storyList global var because this.stories is a property of the StoryList class
+      this.stories.unshift(responseStoryObject);
+      putStoriesOnPage();
+      return responseStoryObject;
   }
 }
 
@@ -90,13 +111,13 @@ class User {
    */
 
   constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+    username,
+    name,
+    createdAt,
+    favorites = [],
+    ownStories = []
+  },
+    token) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;

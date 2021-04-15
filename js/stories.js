@@ -50,3 +50,4 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
