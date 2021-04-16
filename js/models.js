@@ -24,8 +24,8 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    
+    return new URL(this.url).host;
   }
 }
 
@@ -81,7 +81,7 @@ class StoryList {
       method: "POST",
       url: `${BASE_URL}/stories`,
       // CR: data key is needed for axios syntax
-      data:{
+      data: {
         'token': user.loginToken,
         'story': {
           'author': newStory.author,
@@ -93,9 +93,8 @@ class StoryList {
     // CR: response.data.story removes the nesting risk
     let responseStoryObject = new Story(response.data.story);
     //CR: this.stories vs storyList global var because this.stories is a property of the StoryList class
-      this.stories.unshift(responseStoryObject);
-      putStoriesOnPage();
-      return responseStoryObject;
+    this.stories.unshift(responseStoryObject);
+    return responseStoryObject;
   }
 }
 

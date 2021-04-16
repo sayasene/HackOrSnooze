@@ -6,6 +6,7 @@
 
 /** Show main list of all stories when click site name */
 
+
 function navAllStories(evt) {
   console.debug("navAllStories", evt);
   hidePageComponents();
@@ -22,8 +23,20 @@ function navLoginClick(evt) {
   $loginForm.show();
   $signupForm.show();
 }
-
 $navLogin.on("click", navLoginClick);
+
+
+
+/* show submit form on click on "submit" */
+function navSubmitClick(evt) {
+  console.log("submit btn clicked")
+  // need better var name
+  $submitForm.show();
+
+}
+/* when "submit" clicked on nav bar, drop down form */
+$("#nav-submit").on("click", navSubmitClick);
+
 
 /** When a user first logins in, update the navbar to reflect that. */
 

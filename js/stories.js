@@ -49,5 +49,32 @@ function putStoriesOnPage() {
   }
 
   $allStoriesList.show();
+
 }
 
+
+/* call whenever the new story form is submitted, hides form area and resets input values to empty strings */
+function resetAndHideForm() {
+  console.log("hiding submit form")
+  $submitForm.hide();
+  $submitForm.trigger("reset");
+}
+
+
+/* when user fills out and submits form, grab info and pass it to addStory(), collapse form and clear values */
+
+async function submitNewStory(evt) {
+  evt.preventDefault();
+  console.log($("#submit-form-author").val())
+  let newStoryData = {
+    "author": $("#submit-form-author").val(),
+    "title": $("#submit-form-title").val(),
+    "url": $("#submit-form-url").val()
+  }
+  resetAndHideForm()
+  let newStory = await storyList.addStory(currentUser, newStoryData);
+  let $newStory = generateStoryMarkup(newStory);
+  $allStoriesList.prepend($newStory);
+}
+/* when submit form button is clicked, run submitNewStory */
+$("#submit-story-form").on("submit", submitNewStory);
