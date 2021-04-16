@@ -13,7 +13,7 @@ const $signupForm = $("#signup-form");
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
-const $submitForm = $("#submit-story-form");
+const $submitStoryForm = $("#submit-story-form");
 
 
 
@@ -27,7 +27,7 @@ function hidePageComponents() {
     $allStoriesList,
     $loginForm,
     $signupForm,
-    $submitForm,
+    $submitStoryForm,
   ];
   components.forEach(c => c.hide());
   console.log("hiding page componants")
@@ -46,7 +46,7 @@ async function start() {
   if (currentUser) updateUIOnUserLogin();
 
   /* hide submit form on page load*/
-  resetAndHideForm()
+  resetAndHideForm();
 
 }
 

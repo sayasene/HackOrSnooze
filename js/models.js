@@ -93,7 +93,9 @@ class StoryList {
     // CR: response.data.story removes the nesting risk
     let responseStoryObject = new Story(response.data.story);
     //CR: this.stories vs storyList global var because this.stories is a property of the StoryList class
+    // CR: need to add new story to ownStories
     this.stories.unshift(responseStoryObject);
+    user.ownStories.unshift(responseStoryObject);
     return responseStoryObject;
   }
 }
@@ -211,4 +213,33 @@ class User {
       return null;
     }
   }
+  // add docstring
+  async addUserFavorite(story) {
+    // send post request to add story to favorites array
+    const token = this.loginToken;
+    console.log(token);
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "POST",
+      data: {token: token}
+    })
+    //story parameter in line 217 becomes transformed in the backend via the axios post request
+    // therefore pushing on line 228 will return a story object with updated info to push to favorites array
+    currentUser.favorites.push(story);
+    // add the response data from the backend and update the favorites array in
+    // in the front end
+    console.log('addUserFavorite response is',response);
+  }
+
+  // add docstring
+  async removeUserFavorite(story) {
+    // send delete request to remove story to favorites array
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      data: {token: token}
+    })
+  }
+
 }

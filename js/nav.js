@@ -31,7 +31,7 @@ $navLogin.on("click", navLoginClick);
 function navSubmitClick(evt) {
   console.log("submit btn clicked")
   // need better var name
-  $submitForm.show();
+  $submitStoryForm.show();
 
 }
 /* when "submit" clicked on nav bar, drop down form */
