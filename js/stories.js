@@ -23,7 +23,7 @@ function generateStoryMarkup(story) {
 
   const hostName = story.getHostName();
   return $(`
-      <li id="${story.storyId}">
+      <li class="Story" id="${story.storyId}">
       <span > <i id= "favoriteButton" class="far fa-thumbs-up"></i></span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -87,36 +87,35 @@ $("#submit-story-form").on("submit", submitNewStory);
 // favorites section (check if this is already a section in starter code), remove from dom
 // if unfavorited 
 
-// toggleFavoriteButton(evt) - save evt.target of closest to story to storyClicked var. check and see
-// if storyClicked.storyId is in currentUser.favorites.storyId. 
+
+// on click of favorite button, target the closest list element and obtain the storyID, identify
+// the story associated with that ID in the storyList
 
 function toggleFavoriteButton(evt){
-  let clickedStoryId = $(evt.target).closest("li").attr("id");
-  let result = checkIfInFavorite(clickedStoryId);
-  addOrRemoveFavoriteConductor(result)
+  // CR: dont look for a list items, runs risk of design changes adverse effects. instead assign a class.
+  let clickedStoryId = $(evt.target).closest(".Story").attr("id");
+  // CR: use .find instead of .filter, more fit for purpose. trying to find the one item that matches at an id
+  let clickedStoryObject = storyList.stories.filter((story) => story.storyId===clickedStoryId);
+  checkIfInFavorite(clickedStoryObject[0]);
 }
 
-// loops through currentUser.favorites.storyId to check and see
-// if ID passed as argument is inside current user array .  if YES => return true
-// if NO => return false . 
-function checkIfInFavorite(id){
+// loops through currentUser.favorites and checks if the ID of the story clicked
+// by the user matches an existing storyId in the current user's favorites array
+// if present, will remove - else will add to the array
+// CR: name: its not just checking, use .find instead of a for-of
+function checkIfInFavorite(clickedStory){
   for (let story of currentUser.favorites){
     //loop through all currentUser favorite story IDs to check for match
-    if(story.storyId === id){
-      return true;
+    if(story.storyId === clickedStory.storyId){
+      console.log('removing soon')
+      return currentUser.removeUserFavorite(clickedStory);
+      
     } 
   }
-  return false;
+  console.log('adding soon')
+  return currentUser.addUserFavorite(clickedStory);
 }
-
-// conductor function. toggleFavoriteButton finds the clicked stories ID and passes it into CheckIfInFavorites to see if we have 
-// already favorited story or not
-
-function addOrRemoveFavoriteConductor(result){
-  if (result){
-    currentUser.addUserFavorite()
-  }
-}
-
-$allStoriesList.on("click", "span", toggleFavoriteButton);
+//CR: attaches a listener to the allstorieslist, checks for any clicks in the storieslist, checks if the element click matches the
+// class '.fa-thumbs-up', if so then run the toggleFavoriteButton
+$allStoriesList.on("click", ".fa-thumbs-up", toggleFavoriteButton);
 
