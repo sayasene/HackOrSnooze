@@ -213,7 +213,8 @@ class User {
       return null;
     }
   }
-  // add docstring
+  // accepts single story object, sends post request to API too add to backend user favorites, and finally 
+  // adds story object to currentUser favorites array in frontend
   async addUserFavorite(story) {
     // send post request to add story to favorites array
     const token = this.loginToken;
@@ -231,15 +232,21 @@ class User {
     console.log('addUserFavorite response is',response);
   }
 
-  // add docstring
+  // accepts single story object, sends DELETE 
+  // request to API to remove from backend user favorites, and finally 
+  // removes story object from currentUser favorites array in frontend
   async removeUserFavorite(story) {
     // send delete request to remove story to favorites array
     const token = this.loginToken;
-    await axios({
+    const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "DELETE",
       data: {token: token}
     })
+    // look through each story(id), if storyID != argument(id), return to new array 
+    currentUser.favorites = currentUser.favorites.filter((favoriteStory) => favoriteStory.storyId != story.storyId);
+
+    console.log("story removed, user favorites =", currentUser.favorites);
   }
 
 }

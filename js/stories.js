@@ -20,12 +20,11 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-      <span><i id='favoriteButton' class="far fa-thumbs-up"></i></span>
+      <span > <i id= "favoriteButton" class="far fa-thumbs-up"></i></span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -87,3 +86,37 @@ $("#submit-story-form").on("submit", submitNewStory);
 // UI logic: first click makes thumbs up dark, second click makes it light, prepends to 
 // favorites section (check if this is already a section in starter code), remove from dom
 // if unfavorited 
+
+// toggleFavoriteButton(evt) - save evt.target of closest to story to storyClicked var. check and see
+// if storyClicked.storyId is in currentUser.favorites.storyId. 
+
+function toggleFavoriteButton(evt){
+  let clickedStoryId = $(evt.target).closest("li").attr("id");
+  let result = checkIfInFavorite(clickedStoryId);
+  addOrRemoveFavoriteConductor(result)
+}
+
+// loops through currentUser.favorites.storyId to check and see
+// if ID passed as argument is inside current user array .  if YES => return true
+// if NO => return false . 
+function checkIfInFavorite(id){
+  for (let story of currentUser.favorites){
+    //loop through all currentUser favorite story IDs to check for match
+    if(story.storyId === id){
+      return true;
+    } 
+  }
+  return false;
+}
+
+// conductor function. toggleFavoriteButton finds the clicked stories ID and passes it into CheckIfInFavorites to see if we have 
+// already favorited story or not
+
+function addOrRemoveFavoriteConductor(result){
+  if (result){
+    currentUser.addUserFavorite()
+  }
+}
+
+$allStoriesList.on("click", "span", toggleFavoriteButton);
+
